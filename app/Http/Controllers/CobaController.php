@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Friends;
+use App\Models\Groups;
+
 
 class CobaController extends Controller
 {
@@ -43,10 +45,21 @@ class CobaController extends Controller
         $friends = Friends::where('id', $id)->first();
         return view('friends.show', ['friend' => $friends]);
     }
+
     public function edit($id)
     {
         $friends = Friends::where('id', $id)->first();
         return view('friends.edit', ['friend' => $friends]);
+    }
+    public function detail($groups_id)
+    {
+        // $friends = Friends::where('groups_id', $groups_id);
+        // return view('friends.detail', compact('friends'));
+        $groups =  Groups::where('id', $groups_id)->first();
+        // var_dump($groups);
+        // die();
+        $friends = Friends::where('groups_id', $groups_id)->get();
+        return view('friends.detail', ['friend' => $friends,'group'=>$groups]);
     }
     public function update(Request $request, $id)
     {

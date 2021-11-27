@@ -47,9 +47,7 @@ class GroupsController extends Controller
 
         $groups->name = $request->name;
         $groups->description = $request->description;
-
         $groups->save();
-
         return redirect('/groups');
     }
 
@@ -116,7 +114,11 @@ class GroupsController extends Controller
         $friend = Friends::where('id', $request->friend_id)->first();
         Friends::find($friend->id)->update([
             'groups_id' => $id
-
+        ]);
+        groups::find($id)->update([
+            'anggota_masuk' => $request->anggota_masuk,
+            'anggota_keluar' => $request->anggota_keluar,
+            'anggota_saat_ini' => ($request->anggota_masuk - $request->anggota_keluar)
         ]);
 
         return redirect('/groups/addmember/' . $id);
@@ -126,7 +128,11 @@ class GroupsController extends Controller
         //dd($id);
         Friends::find($id)->update([
             'groups_id' => 0
-
+        ]);
+        groups::find($request->groups_id)->update([
+            'anggota_masuk' => $request->anggota_masuk,
+            'anggota_keluar' => $request->anggota_keluar,
+            'anggota_saat_ini' => ($request->anggota_masuk - $request->anggota_keluar)
         ]);
 
         return redirect('/groups');
